@@ -1,12 +1,10 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Navbar from './components/navbar'
 
 function App() {
-  const states = { title: 'Soy Felipe Trujillo ', role: 'Full-Stack Web Developer' }
   const textos = ['Full-Stack Web Developer', 'Full-Stack Mobile Developer', 'UI/UX Designer']
-  const [role, setRole] = useState('Full-Stack Web Developer')
+  const [role, setRole] = useState('')
 
   type Numeros = {
     0: number,
@@ -14,7 +12,7 @@ function App() {
     2: number,
   }
   const textStatus = {
-    completed: true,
+    completed: false,
     selected: 0,
   }
 
@@ -24,22 +22,26 @@ function App() {
    */
   const loopChangeText = () => {
     if (textStatus.completed == true) {
-
-      setRole((role) => role.substring(0, role.length - 1))
+      setRole((e) => e.substring(0, e.length - 1))
       if (role.length > 0) return
       textStatus.selected = textStatus.selected + 1
       if (textStatus.selected >= Object.keys(textos).length) textStatus.selected = 0
       textStatus.completed = false;
       return
     }
-
-    setRole((role) => textos[textStatus.selected as keyof Numeros].substring(0, role.length + 1))
+    setRole((e) => textos[textStatus.selected as keyof Numeros].substring(0, e.length + 1))
     if (role === textos[textStatus.selected as keyof Numeros]) textStatus.completed = true
     return
   }
-  setInterval(() => {
-    loopChangeText()
-  }, 300 - Math.random() * 1)
+  useEffect(() => {
+    let ticker = setInterval(() => {
+      loopChangeText()
+    }, 300 - Math.random() * 1)
+
+    return () => {
+      clearInterval(ticker)
+    }
+  })
 
   return (
     <div className="App">
@@ -56,7 +58,7 @@ function App() {
                   </div>
                 </div>
                 <div className="text-start">
-                  <h1 className="text-5xl font-bold tracking-tight dark:text-gray-100 text-gray-900 sm:text-7xl">Soy Felipe Trujillo 
+                  <h1 className="text-5xl font-bold tracking-tight dark:text-gray-100 text-gray-900 sm:text-7xl">Soy Felipe 
                     <span className="border-r-4 pr-2 text-red-500">
                       {role}
 
